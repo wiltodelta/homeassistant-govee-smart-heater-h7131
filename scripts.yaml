@@ -3,13 +3,13 @@ govee_smart_heater_on:
   sequence:
   - service: rest_command.govee_appliance_request
     data:
-      device: place your device id here
+      device: DEVICE_ID
       model: H7131
       cmd_name: mode
       cmd_value: '2' # Medium
   - service: rest_command.govee_appliance_request
     data:
-      device: place your device id here
+      device: DEVICE_ID
       model: H7131
       cmd_name: turn
       cmd_value: 'on'
@@ -20,7 +20,7 @@ smart_space_heater_off:
   sequence:
   - service: rest_command.govee_appliance_request
     data:
-      device: place your device id here
+      device: DEVICE_ID
       model: H7131
       cmd_name: turn
       cmd_value: 'off'
