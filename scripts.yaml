@@ -1,0 +1,28 @@
+govee_smart_heater_on:
+  alias: 'Smart Space Heater: On'
+  sequence:
+  - service: rest_command.govee_appliance_request
+    data:
+      device: place your device id here
+      model: H7131
+      cmd_name: mode
+      cmd_value: '2' # Medium
+  - service: rest_command.govee_appliance_request
+    data:
+      device: place your device id here
+      model: H7131
+      cmd_name: turn
+      cmd_value: 'on'
+  mode: single
+  icon: mdi:radiator
+smart_space_heater_off:
+  alias: 'Smart Space Heater: Off'
+  sequence:
+  - service: rest_command.govee_appliance_request
+    data:
+      device: place your device id here
+      model: H7131
+      cmd_name: turn
+      cmd_value: 'off'
+  mode: single
+  icon: mdi:radiator-off

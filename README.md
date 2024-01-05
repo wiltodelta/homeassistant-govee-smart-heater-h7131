@@ -1,1 +1,1 @@
-# homeassistant-govee-smart-heater-h7131
+# Home Assistant Govee Smart Heater H7131
