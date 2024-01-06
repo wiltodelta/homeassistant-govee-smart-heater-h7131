@@ -11,7 +11,7 @@ rest_command:
 
 input_boolean:
   smart_heater_state:
-    name: Smart Heater State
+    name: Govee Smart Heater State
     icon: >-
       {% if is_state('input_boolean.smart_heater_state', 'on') %} mdi:radiator
       {% else %} mdi:radiator-off
@@ -22,7 +22,7 @@ switch:
     switches:
       smart_heater_lr_toggle:
         value_template: '{{ states("input_boolean.smart_heater_state") }}'
-        friendly_name: "Smart Heater Toggle"
+        friendly_name: "Govee Smart Heater"
         turn_on:
           - service: input_boolean.turn_on
             entity_id: input_boolean.smart_heater_state
