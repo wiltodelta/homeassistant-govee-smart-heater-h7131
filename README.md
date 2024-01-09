@@ -40,6 +40,12 @@ wget --no-check-certificate --quiet \
 curl.exe --location 'https://developer-api.govee.com/v1/appliance/devices' --header 'Govee-API-Key: YOUR_GOVEE_API_KEY'
 ```
 
+#### Windows PowerShell with newer API
+```
+curl.exe --location 'https://openapi.api.govee.com/router/api/v1/user/devices' --header 'Content-Type: application/json' --header 'Govee-API-Key: YOUR_GOVEE_API_KEY'
+
+```
+
 ### 3. Configure Home Assistant
 
 Add lines from configuration.yaml, scripts.yaml and secrets.yaml to your configuration files. You should replace YOUR_GOVEE_API_KEY and YOUR_DEVICE_ID in these files beforehand.
