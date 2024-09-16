@@ -23,7 +23,8 @@ Use the [Apply Govee-API-Key](https://developer.govee.com/reference/apply-you-go
 Make a request to the [Govee Developer API](https://govee-public.s3.amazonaws.com/developer-docs/GoveeDeveloperAPIReference.pdf) to get the list of devices, replacing YOUR_GOVEE_API_KEY with the API key obtained in the previous step.
 
 ```
-curl --location 'https://developer-api.govee.com/v1/appliance/devices' \
+curl --location 'https://openapi.api.govee.com/router/api/v1/user/devices' \
+--header 'Content-Type: application/json'
 --header 'Govee-API-Key: YOUR_GOVEE_API_KEY'
 ```
 
@@ -32,7 +33,8 @@ wget --no-check-certificate --quiet \
   --method GET \
   --timeout=0 \
   --header 'Govee-API-Key: YOUR_GOVEE_API_KEY' \
-   'https://developer-api.govee.com/v1/appliance/devices'
+  --header 'Content-Type: application/json' \
+   'https://openapi.api.govee.com/router/api/v1/user/devices'
 ```
 
 ### 3. Configure Home Assistant
