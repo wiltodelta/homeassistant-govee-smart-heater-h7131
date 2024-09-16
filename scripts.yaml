@@ -6,15 +6,18 @@ govee_smart_heater_on:
       device: YOUR_DEVICE_ID
       model: H7131
       cmd_name: mode
-      cmd_value: '2' # Medium
+      cmd_instance: workMode
+      cmd_value: 2  # Medium
   - service: rest_command.govee_appliance_request
     data:
       device: YOUR_DEVICE_ID
       model: H7131
-      cmd_name: turn
-      cmd_value: 'on'
+      cmd_name: on_off
+      cmd_instance: powerSwitch
+      cmd_value: 1  # On
   mode: single
   icon: mdi:radiator
+
 smart_space_heater_off:
   alias: 'Smart Space Heater: Off'
   sequence:
@@ -22,7 +25,8 @@ smart_space_heater_off:
     data:
       device: YOUR_DEVICE_ID
       model: H7131
-      cmd_name: turn
-      cmd_value: 'off'
+      cmd_name: on_off
+      cmd_instance: powerSwitch
+      cmd_value: 0  # Off
   mode: single
   icon: mdi:radiator-off
