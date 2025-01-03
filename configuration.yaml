@@ -6,7 +6,19 @@ rest_command:
       Content-Type: application/json
       Govee-API-Key: !secret govee_api_key
     content_type: "application/json; charset=utf-8"
-    payload: "{{ data | tojson }}"
+    payload: >-
+      {
+        "requestId": "{{ requestId }}",
+        "payload": {
+          "sku": "{{ sku }}",
+          "device": "{{ device }}",
+          "capability": {
+            "type": "{{ capability_type }}",
+            "instance": "{{ capability_instance }}",
+            "value": {{ capability_value }}
+          }
+        }
+      }
     verify_ssl: true
 
 input_boolean:
