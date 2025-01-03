@@ -1,32 +1,65 @@
+# API reference: https://developer.govee.com/reference/control-you-devices
 govee_smart_heater_on:
-  alias: 'Smart Space Heater: On'
+  alias: 'Govee Smart Space Heater: On'
+  fields:
+    device_id:
+      description: 'Device ID'
+      example: 'XX:XX:XX:XX'
+    heater_id:
+      description: 'Heater number'
+      example: '1'
   sequence:
-  - service: rest_command.govee_appliance_request
-    data:
-      device: YOUR_DEVICE_ID
-      model: H7131
-      cmd_name: mode
-      cmd_instance: workMode
-      cmd_value: 2  # Medium
-  - service: rest_command.govee_appliance_request
-    data:
-      device: YOUR_DEVICE_ID
-      model: H7131
-      cmd_name: on_off
-      cmd_instance: powerSwitch
-      cmd_value: 1  # On
+    - condition: template
+      value_template: >
+        {% set current_state = states('sensor.govee_heater_' ~ heater_id ~ '_state') | int %}
+        {{ current_state == 0 }}
+    - service: rest_command.govee_appliance_request
+      data:
+        device: "{{ device_id }}"
+        model: H7131
+        cmd_name: work_mode
+        cmd_instance: workMode
+        cmd_value: '{"workMode": 1, "modeValue": 2}' # gearMode with Medium setting
+    - service: rest_command.govee_appliance_request
+      data:
+        device: "{{ device_id }}"
+        model: H7131
+        cmd_name: on_off
+        cmd_instance: powerSwitch
+        cmd_value: 1 # On
+    - delay: 
+        seconds: 2
+    - service: homeassistant.update_entity
+      target:
+        entity_id: "sensor.govee_heater_{{ heater_id }}_state"
   mode: single
   icon: mdi:radiator
 
-smart_space_heater_off:
-  alias: 'Smart Space Heater: Off'
+govee_smart_heater_off:
+  alias: 'Govee Smart Space Heater: Off'
+  fields:
+    device_id:
+      description: 'Device ID'
+      example: 'XX:XX:XX:XX'
+    heater_id:
+      description: 'Heater number'
+      example: '1'
   sequence:
-  - service: rest_command.govee_appliance_request
-    data:
-      device: YOUR_DEVICE_ID
-      model: H7131
-      cmd_name: on_off
-      cmd_instance: powerSwitch
-      cmd_value: 0  # Off
+    - condition: template
+      value_template: >
+        {% set current_state = states('sensor.govee_heater_' ~ heater_id ~ '_state') | int %}
+        {{ current_state == 1 }}
+    - service: rest_command.govee_appliance_request
+      data:
+        device: "{{ device_id }}"
+        model: H7131
+        cmd_name: on_off
+        cmd_instance: powerSwitch
+        cmd_value: 0 # Off
+    - delay: 
+        seconds: 2
+    - service: homeassistant.update_entity
+      target:
+        entity_id: "sensor.govee_heater_{{ heater_id }}_state"
   mode: single
   icon: mdi:radiator-off

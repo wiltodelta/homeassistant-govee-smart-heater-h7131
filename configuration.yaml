@@ -6,44 +6,119 @@ rest_command:
       Content-Type: application/json
       Govee-API-Key: !secret govee_api_key
     content_type: "application/json; charset=utf-8"
-    payload: >
+    payload: >-
       {
-        "requestId": "uuid",
+        "requestId": "{{ range(1, 9999) | random }}",
         "payload": {
           "sku": "{{ model }}",
           "device": "{{ device }}",
           "capability": {
             "type": "devices.capabilities.{{ cmd_name }}",
             "instance": "{{ cmd_instance }}",
+            {% if cmd_name == 'work_mode' %}
             "value": {{ cmd_value }}
+            {% else %}
+            "value": {{ cmd_value | int }}
+            {% endif %}
           }
         }
       }
     verify_ssl: true
 
-input_boolean:
-  smart_heater_state:
-    name: Govee Smart Heater State
-    icon: >-
-      {% if is_state('input_boolean.smart_heater_state', 'on') %} mdi:radiator
-      {% else %} mdi:radiator-off
-      {% endif %}
+input_text:
+  govee_heater_1_id:
+    name: Govee Heater 1 ID
+    initial: YOUR_DEVICE_ID_1
+  # govee_heater_2_id:
+  #   name: Govee Heater 2 ID
+  #   initial: YOUR_DEVICE_ID_2
 
 switch:
   - platform: template
     switches:
-      smart_heater_lr_toggle:
-        value_template: '{{ states("input_boolean.smart_heater_state") }}'
-        friendly_name: "Govee Smart Heater"
+      govee_heater_1:
+        value_template: "{{ states('sensor.govee_heater_1_state') | int == 1 }}"
+        friendly_name: "Govee Heater 1"
         turn_on:
-          - service: input_boolean.turn_on
-            entity_id: input_boolean.smart_heater_state
           - service: script.govee_smart_heater_on
+            data:
+              device_id: "{{ states('input_text.govee_heater_1_id') }}"
+              heater_id: "1"
         turn_off:
-          - service: input_boolean.turn_off
-            entity_id: input_boolean.smart_heater_state
-          - service: script.smart_space_heater_off
+          - service: script.govee_smart_heater_off
+            data:
+              device_id: "{{ states('input_text.govee_heater_1_id') }}"
+              heater_id: "1"
         icon_template: >-
-          {% if is_state('input_boolean.smart_heater_state', 'on') %} mdi:radiator
-          {% else %} mdi:radiator-off
+          {% if is_state('sensor.govee_heater_1_state', '1') %}
+            mdi:radiator
+          {% else %}
+            mdi:radiator-off
           {% endif %}
+
+      # govee_heater_2:
+      #   value_template: "{{ states('sensor.govee_heater_2_state') | int == 1 }}"
+      #   friendly_name: "Govee Heater 2"
+      #   turn_on:
+      #     - service: script.govee_smart_heater_on
+      #       data:
+      #         device_id: "{{ states('input_text.govee_heater_2_id') }}"
+      #         heater_id: "2"
+      #   turn_off:
+      #     - service: script.govee_smart_heater_off
+      #       data:
+      #         device_id: "{{ states('input_text.govee_heater_2_id') }}"
+      #         heater_id: "2"
+      #   icon_template: >-
+      #     {% if is_state('sensor.govee_heater_2_state', '1') %}
+      #       mdi:radiator
+      #     {% else %}
+      #       mdi:radiator-off
+      #     {% endif %}
+
+sensor:
+  - platform: rest
+    name: govee_heater_1_state
+    resource: https://openapi.api.govee.com/router/api/v1/device/state
+    method: POST
+    headers:
+      Govee-API-Key: !secret govee_api_key
+      Content-Type: application/json
+    payload: >-
+      {
+        "requestId": "{{ range(1, 9999) | random }}",
+        "payload": {
+          "sku": "H7131",
+          "device": "{{ states('input_text.govee_heater_1_id') }}"
+        }
+      }
+    value_template: >-
+      {% set state = value_json.payload.capabilities | selectattr('instance', 'eq', 'powerSwitch') | map(attribute='value') | first %}
+      {{ state }}
+    json_attributes_path: "$.payload.capabilities"
+    json_attributes:
+      - value
+    scan_interval: 30
+
+  # - platform: rest
+  #   name: govee_heater_2_state
+  #   resource: https://openapi.api.govee.com/router/api/v1/device/state
+  #   method: POST
+  #   headers:
+  #     Govee-API-Key: !secret govee_api_key
+  #     Content-Type: application/json
+  #   payload: >-
+  #     {
+  #       "requestId": "{{ range(1, 9999) | random }}",
+  #       "payload": {
+  #         "sku": "H7131",
+  #         "device": "{{ states('input_text.govee_heater_2_id') }}"
+  #       }
+  #     }
+  #   value_template: >-
+  #     {% set state = value_json.payload.capabilities | selectattr('instance', 'eq', 'powerSwitch') | map(attribute='value') | first %}
+  #     {{ state }}
+  #   json_attributes_path: "$.payload.capabilities"
+  #   json_attributes:
+  #     - value
+  #   scan_interval: 30
