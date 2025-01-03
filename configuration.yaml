@@ -6,19 +6,7 @@ rest_command:
       Content-Type: application/json
       Govee-API-Key: !secret govee_api_key
     content_type: "application/json; charset=utf-8"
-    payload: >
-      {
-        "requestId": "uuid",
-        "payload": {
-          "sku": "{{ model }}",
-          "device": "{{ device }}",
-          "capability": {
-            "type": "devices.capabilities.{{ cmd_name }}",
-            "instance": "{{ cmd_instance }}",
-            "value": {{ cmd_value }}
-          }
-        }
-      }
+    payload: "{{ data | tojson }}"
     verify_ssl: true
 
 input_boolean:
@@ -38,11 +26,11 @@ switch:
         turn_on:
           - service: input_boolean.turn_on
             entity_id: input_boolean.smart_heater_state
-          - service: script.govee_smart_heater_on
+          - service: script.govee_heater_on
         turn_off:
           - service: input_boolean.turn_off
             entity_id: input_boolean.smart_heater_state
-          - service: script.smart_space_heater_off
+          - service: script.govee_heater_off
         icon_template: >-
           {% if is_state('input_boolean.smart_heater_state', 'on') %} mdi:radiator
           {% else %} mdi:radiator-off

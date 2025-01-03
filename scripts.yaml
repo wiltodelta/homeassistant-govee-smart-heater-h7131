@@ -1,32 +1,43 @@
-govee_smart_heater_on:
-  alias: 'Smart Space Heater: On'
+govee_heater_on:
+  alias: 'Govee Heater: On'
   sequence:
   - service: rest_command.govee_appliance_request
     data:
-      device: YOUR_DEVICE_ID
-      model: H7131
-      cmd_name: mode
-      cmd_instance: workMode
-      cmd_value: 2  # Medium
+      requestId: "{{range(1, 9999999) | random}}"
+      payload:
+        sku: H7131
+        device: YOUR_DEVICE_ID
+        capability:
+          type: devices.capabilities.work_mode
+          instance: workMode
+          value:
+            workMode: 1 # gearMode
+            modeValue: 2 # Medium
   - service: rest_command.govee_appliance_request
     data:
-      device: YOUR_DEVICE_ID
-      model: H7131
-      cmd_name: on_off
-      cmd_instance: powerSwitch
-      cmd_value: 1  # On
+      requestId: "{{range(1, 9999999) | random}}"
+      payload:
+        sku: H7131
+        device: YOUR_DEVICE_ID
+        capability:
+          type: devices.capabilities.on_off
+          instance: powerSwitch
+          value: 1 # On
   mode: single
   icon: mdi:radiator
 
-smart_space_heater_off:
-  alias: 'Smart Space Heater: Off'
+govee_heater_off:
+  alias: 'Govee Heater: Off'
   sequence:
   - service: rest_command.govee_appliance_request
     data:
-      device: YOUR_DEVICE_ID
-      model: H7131
-      cmd_name: on_off
-      cmd_instance: powerSwitch
-      cmd_value: 0  # Off
+      requestId: "{{range(1, 9999999) | random}}"
+      payload:
+        sku: H7131
+        device: YOUR_DEVICE_ID
+        capability:
+          type: devices.capabilities.on_off
+          instance: powerSwitch
+          value: 0 # Off
   mode: single
   icon: mdi:radiator-off
