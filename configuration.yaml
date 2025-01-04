@@ -22,49 +22,49 @@ rest_command:
     verify_ssl: true
 
 input_boolean:
-  smart_heater_lr_state:
-    name: Govee Heater LR State
+  smart_heater_1_state:
+    name: Govee Heater 1 State
     icon: >-
-      {% if is_state('input_boolean.smart_heater_lr_state', 'on') %} mdi:radiator
+      {% if is_state('input_boolean.smart_heater_1_state', 'on') %} mdi:radiator
       {% else %} mdi:radiator-off
       {% endif %}
-  smart_heater_gb_state:
-    name: Govee Heater GB State
-    icon: >-
-      {% if is_state('input_boolean.smart_heater_gb_state', 'on') %} mdi:radiator
-      {% else %} mdi:radiator-off
-      {% endif %}
+  # smart_heater_2_state:
+  #   name: Govee Heater 2 State
+  #   icon: >-
+  #     {% if is_state('input_boolean.smart_heater_2_state', 'on') %} mdi:radiator
+  #     {% else %} mdi:radiator-off
+  #     {% endif %}
 
 switch:
   - platform: template
     switches:
-      smart_heater_lr_toggle:
-        value_template: '{{ states("input_boolean.smart_heater_lr_state") }}'
-        friendly_name: "Govee Heater LR"
+      smart_heater_1_toggle:
+        value_template: '{{ states("input_boolean.smart_heater_1_state") }}'
+        friendly_name: "Govee Heater 1"
         turn_on:
           - service: input_boolean.turn_on
-            entity_id: input_boolean.smart_heater_lr_state
-          - service: script.govee_heater_lr_on
+            entity_id: input_boolean.smart_heater_1_state
+          - service: script.govee_heater_1_on
         turn_off:
           - service: input_boolean.turn_off
-            entity_id: input_boolean.smart_heater_lr_state
-          - service: script.govee_heater_lr_off
+            entity_id: input_boolean.smart_heater_1_state
+          - service: script.govee_heater_1_off
         icon_template: >-
-          {% if is_state('input_boolean.smart_heater_lr_state', 'on') %} mdi:radiator
+          {% if is_state('input_boolean.smart_heater_1_state', 'on') %} mdi:radiator
           {% else %} mdi:radiator-off
           {% endif %}
-      smart_heater_gb_toggle:
-        value_template: '{{ states("input_boolean.smart_heater_gb_state") }}'
-        friendly_name: "Govee Heater GB"
-        turn_on:
-          - service: input_boolean.turn_on
-            entity_id: input_boolean.smart_heater_gb_state
-          - service: script.govee_heater_gb_on
-        turn_off:
-          - service: input_boolean.turn_off
-            entity_id: input_boolean.smart_heater_gb_state
-          - service: script.govee_heater_gb_off
-        icon_template: >-
-          {% if is_state('input_boolean.smart_heater_gb_state', 'on') %} mdi:radiator
-          {% else %} mdi:radiator-off
-          {% endif %}
+      # smart_heater_2_toggle:
+      #   value_template: '{{ states("input_boolean.smart_heater_2_state") }}'
+      #   friendly_name: "Govee Heater 2"
+      #   turn_on:
+      #     - service: input_boolean.turn_on
+      #       entity_id: input_boolean.smart_heater_2_state
+      #     - service: script.govee_heater_2_on
+      #   turn_off:
+      #     - service: input_boolean.turn_off
+      #       entity_id: input_boolean.smart_heater_2_state
+      #     - service: script.govee_heater_2_off
+      #   icon_template: >-
+      #     {% if is_state('input_boolean.smart_heater_2_state', 'on') %} mdi:radiator
+      #     {% else %} mdi:radiator-off
+      #     {% endif %}
