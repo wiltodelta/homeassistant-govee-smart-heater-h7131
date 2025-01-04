@@ -21,50 +21,92 @@ rest_command:
       }
     verify_ssl: true
 
-input_boolean:
-  smart_heater_1_state:
-    name: Govee Heater 1 State
-    icon: >-
-      {% if is_state('input_boolean.smart_heater_1_state', 'on') %} mdi:radiator
-      {% else %} mdi:radiator-off
-      {% endif %}
-  # smart_heater_2_state:
-  #   name: Govee Heater 2 State
-  #   icon: >-
-  #     {% if is_state('input_boolean.smart_heater_2_state', 'on') %} mdi:radiator
-  #     {% else %} mdi:radiator-off
-  #     {% endif %}
+  govee_device_state:
+    url: https://openapi.api.govee.com/router/api/v1/device/state
+    method: POST
+    headers:
+      Content-Type: application/json
+      Govee-API-Key: !secret govee_api_key
+    content_type: "application/json; charset=utf-8"
+    payload: >-
+      {
+        "requestId": "{{ requestId }}",
+        "payload": {
+          "sku": "{{ sku }}",
+          "device": "{{ device }}"
+        }
+      }
+    verify_ssl: true
 
 switch:
   - platform: template
     switches:
       smart_heater_1_toggle:
-        value_template: '{{ states("input_boolean.smart_heater_1_state") }}'
+        value_template: '{{ states("sensor.govee_heater_1_state") }}'
         friendly_name: "Govee Heater 1"
         turn_on:
-          - service: input_boolean.turn_on
-            entity_id: input_boolean.smart_heater_1_state
           - service: script.govee_heater_1_on
         turn_off:
-          - service: input_boolean.turn_off
-            entity_id: input_boolean.smart_heater_1_state
           - service: script.govee_heater_1_off
         icon_template: >-
-          {% if is_state('input_boolean.smart_heater_1_state', 'on') %} mdi:radiator
+          {% if states("sensor.govee_heater_1_state") == "1" %} mdi:radiator
           {% else %} mdi:radiator-off
           {% endif %}
       # smart_heater_2_toggle:
-      #   value_template: '{{ states("input_boolean.smart_heater_2_state") }}'
+      #   value_template: '{{ states("sensor.govee_heater_2_state") }}'
       #   friendly_name: "Govee Heater 2"
       #   turn_on:
-      #     - service: input_boolean.turn_on
-      #       entity_id: input_boolean.smart_heater_2_state
       #     - service: script.govee_heater_2_on
       #   turn_off:
-      #     - service: input_boolean.turn_off
-      #       entity_id: input_boolean.smart_heater_2_state
       #     - service: script.govee_heater_2_off
       #   icon_template: >-
-      #     {% if is_state('input_boolean.smart_heater_2_state', 'on') %} mdi:radiator
+      #     {% if states("sensor.govee_heater_2_state") == "1" %} mdi:radiator
       #     {% else %} mdi:radiator-off
       #     {% endif %}
+
+sensor:
+  - platform: rest
+    name: "Govee Heater 1 State"
+    method: POST
+    resource: "https://openapi.api.govee.com/router/api/v1/device/state"
+    headers:
+      Content-Type: application/json
+      Govee-API-Key: !secret govee_api_key
+    payload: >-
+      {
+        "requestId": "4",
+        "payload": {
+          "sku": "H7131",
+          "device": "YOUR_GOVEE_DEVICE_1_ID"
+        }
+      }
+    value_template: "{{ value_json.payload.capabilities | selectattr('instance', 'equalto', 'powerSwitch') | map(attribute='value') | first }}"
+    scan_interval: 60
+    json_attributes_path: "$.payload.capabilities"
+    json_attributes:
+      - value
+      - instance
+      - type
+
+  # - platform: rest
+  #   name: "Govee Heater 2 State"
+  #   method: POST
+  #   resource: "https://openapi.api.govee.com/router/api/v1/device/state"
+  #   headers:
+  #     Content-Type: application/json
+  #     Govee-API-Key: !secret govee_api_key
+  #   payload: >-
+  #     {
+  #       "requestId": "4",
+  #       "payload": {
+  #         "sku": "H7131",
+  #         "device": "YOUR_GOVEE_DEVICE_2_ID"
+  #       }
+  #     }
+  #   value_template: "{{ value_json.payload.capabilities | selectattr('instance', 'equalto', 'powerSwitch') | map(attribute='value') | first }}"
+  #   scan_interval: 60
+  #   json_attributes_path: "$.payload.capabilities"
+  #   json_attributes:
+  #     - value
+  #     - instance
+  #     - type
