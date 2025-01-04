@@ -1,43 +1,71 @@
-govee_heater_on:
-  alias: 'Govee Heater: On'
+govee_heater_lr_on:
+  alias: 'Govee Heater LR: On'
   sequence:
   - service: rest_command.govee_appliance_request
     data:
-      requestId: "{{range(1, 9999999) | random}}"
-      payload:
-        sku: H7131
-        device: YOUR_DEVICE_ID
-        capability:
-          type: devices.capabilities.work_mode
-          instance: workMode
-          value:
-            workMode: 1 # gearMode
-            modeValue: 2 # Medium
+      requestId: "1"
+      sku: H7131
+      device: 90:46:60:74:F4:3B:C5:78
+      capability_type: devices.capabilities.work_mode
+      capability_instance: workMode
+      capability_value: {"workMode": 1, "modeValue": 2}
   - service: rest_command.govee_appliance_request
     data:
-      requestId: "{{range(1, 9999999) | random}}"
-      payload:
-        sku: H7131
-        device: YOUR_DEVICE_ID
-        capability:
-          type: devices.capabilities.on_off
-          instance: powerSwitch
-          value: 1 # On
+      requestId: "2"
+      sku: H7131
+      device: 90:46:60:74:F4:3B:C5:78
+      capability_type: devices.capabilities.on_off
+      capability_instance: powerSwitch
+      capability_value: 1
   mode: single
   icon: mdi:radiator
 
-govee_heater_off:
-  alias: 'Govee Heater: Off'
+govee_heater_lr_off:
+  alias: 'Govee Heater LR: Off'
   sequence:
   - service: rest_command.govee_appliance_request
     data:
-      requestId: "{{range(1, 9999999) | random}}"
-      payload:
-        sku: H7131
-        device: YOUR_DEVICE_ID
-        capability:
-          type: devices.capabilities.on_off
-          instance: powerSwitch
-          value: 0 # Off
+      requestId: "3"
+      sku: H7131
+      device: 90:46:60:74:F4:3B:C5:78
+      capability_type: devices.capabilities.on_off
+      capability_instance: powerSwitch
+      capability_value: 0
+  mode: single
+  icon: mdi:radiator-off
+
+govee_heater_gb_on:
+  alias: 'Govee Heater GB: On'
+  sequence:
+  - service: rest_command.govee_appliance_request
+    data:
+      requestId: "1"
+      sku: H7131
+      device: DB:33:D4:AD:FC:F2:3F:F8
+      capability_type: devices.capabilities.work_mode
+      capability_instance: workMode
+      capability_value: {"workMode": 1, "modeValue": 2}
+  - service: rest_command.govee_appliance_request
+    data:
+      requestId: "2"
+      sku: H7131
+      device: DB:33:D4:AD:FC:F2:3F:F8
+      capability_type: devices.capabilities.on_off
+      capability_instance: powerSwitch
+      capability_value: 1
+  mode: single
+  icon: mdi:radiator
+
+govee_heater_gb_off:
+  alias: 'Govee Heater GB: Off'
+  sequence:
+  - service: rest_command.govee_appliance_request
+    data:
+      requestId: "3"
+      sku: H7131
+      device: DB:33:D4:AD:FC:F2:3F:F8
+      capability_type: devices.capabilities.on_off
+      capability_instance: powerSwitch
+      capability_value: 0
   mode: single
   icon: mdi:radiator-off
