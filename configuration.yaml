@@ -1,9 +1,9 @@
 input_boolean:
-  govee_heater_lr_state:
-    name: Govee Heater LR State
+  govee_heater_1_state:
+    name: "Govee Heater 1 State"
     icon: mdi:radiator
-  govee_heater_gb_state:
-    name: Govee Heater GB State
+  govee_heater_2_state:
+    name: "Govee Heater 2 State"
     icon: mdi:radiator
 
 rest_command:
@@ -47,43 +47,43 @@ rest_command:
 switch:
   - platform: template
     switches:
-      govee_heater_lr_toggle:
-        value_template: '{{ states("input_boolean.govee_heater_lr_state") }}'
-        friendly_name: "Govee Heater LR"
+      govee_heater_1_toggle:
+        value_template: '{{ states("input_boolean.govee_heater_1_state") }}'
+        friendly_name: "Govee Heater 1"
         turn_on:
-          - service: script.govee_heater_lr_on
+          - service: script.govee_heater_1_on
         turn_off:
-          - service: script.govee_heater_lr_off
+          - service: script.govee_heater_1_off
         icon_template: >-
-          {% if is_state('input_boolean.govee_heater_lr_state', 'on') %} mdi:radiator
+          {% if is_state('input_boolean.govee_heater_1_state', 'on') %} mdi:radiator
           {% else %} mdi:radiator-off
           {% endif %}
-      govee_heater_gb_toggle:
-        value_template: '{{ states("input_boolean.govee_heater_gb_state") }}'
-        friendly_name: "Govee Heater GB"
+      govee_heater_2_toggle:
+        value_template: '{{ states("input_boolean.govee_heater_2_state") }}'
+        friendly_name: "Govee Heater 2"
         turn_on:
-          - service: script.govee_heater_gb_on
+          - service: script.govee_heater_2_on
         turn_off:
-          - service: script.govee_heater_gb_off
+          - service: script.govee_heater_2_off
         icon_template: >-
-          {% if is_state('input_boolean.govee_heater_gb_state', 'on') %} mdi:radiator
+          {% if is_state('input_boolean.govee_heater_2_state', 'on') %} mdi:radiator
           {% else %} mdi:radiator-off
           {% endif %}
 
 sensor:
   - platform: rest
-    name: "Govee Heater LR API State"
+    name: "Govee Heater 1 API State"
     method: POST
-    resource: "https://openapi.api.govee.com/router/api/v1/device/state"
+    resource: https://openapi.api.govee.com/router/api/v1/device/state
     headers:
       Content-Type: application/json
       Govee-API-Key: !secret govee_api_key
     payload: >-
       {
-        "requestId": "lr_4",
+        "requestId": "1_4",
         "payload": {
           "sku": "H7131",
-          "device": "!secret govee_heater_lr_device"
+          "device": !secret govee_heater_1_device
         }
       }
     value_template: >-
@@ -102,18 +102,18 @@ sensor:
       - state
 
   - platform: rest
-    name: "Govee Heater GB API State"
+    name: "Govee Heater 2 API State"
     method: POST
-    resource: "https://openapi.api.govee.com/router/api/v1/device/state"
+    resource: https://openapi.api.govee.com/router/api/v1/device/state
     headers:
       Content-Type: application/json
       Govee-API-Key: !secret govee_api_key
     payload: >-
       {
-        "requestId": "gb_4",
+        "requestId": "2_4",
         "payload": {
           "sku": "H7131",
-          "device": "!secret govee_heater_gb_device"
+          "device": !secret govee_heater_2_device
         }
       }
     value_template: >-
