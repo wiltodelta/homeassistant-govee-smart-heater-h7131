@@ -1,3 +1,11 @@
+input_boolean:
+  govee_heater_1_state:
+    name: "Govee Heater 1 State"
+    icon: mdi:radiator
+  govee_heater_2_state:
+    name: "Govee Heater 2 State"
+    icon: mdi:radiator
+
 rest_command:
   govee_appliance_request:
     url: https://openapi.api.govee.com/router/api/v1/device/control
@@ -19,52 +27,106 @@ rest_command:
           }
         }
       }
-    verify_ssl: true
 
-input_boolean:
-  smart_heater_1_state:
-    name: Govee Heater 1 State
-    icon: >-
-      {% if is_state('input_boolean.smart_heater_1_state', 'on') %} mdi:radiator
-      {% else %} mdi:radiator-off
-      {% endif %}
-  # smart_heater_2_state:
-  #   name: Govee Heater 2 State
-  #   icon: >-
-  #     {% if is_state('input_boolean.smart_heater_2_state', 'on') %} mdi:radiator
-  #     {% else %} mdi:radiator-off
-  #     {% endif %}
+  govee_device_state:
+    url: https://openapi.api.govee.com/router/api/v1/device/state
+    method: POST
+    headers:
+      Content-Type: application/json
+      Govee-API-Key: !secret govee_api_key
+    content_type: "application/json; charset=utf-8"
+    payload: >-
+      {
+        "requestId": "{{ requestId }}",
+        "payload": {
+          "sku": "{{ sku }}",
+          "device": "{{ device }}"
+        }
+      }
 
 switch:
   - platform: template
     switches:
-      smart_heater_1_toggle:
-        value_template: '{{ states("input_boolean.smart_heater_1_state") }}'
+      govee_heater_1_toggle:
+        value_template: '{{ states("input_boolean.govee_heater_1_state") }}'
         friendly_name: "Govee Heater 1"
         turn_on:
-          - service: input_boolean.turn_on
-            entity_id: input_boolean.smart_heater_1_state
           - service: script.govee_heater_1_on
         turn_off:
-          - service: input_boolean.turn_off
-            entity_id: input_boolean.smart_heater_1_state
           - service: script.govee_heater_1_off
         icon_template: >-
-          {% if is_state('input_boolean.smart_heater_1_state', 'on') %} mdi:radiator
+          {% if is_state('input_boolean.govee_heater_1_state', 'on') %} mdi:radiator
           {% else %} mdi:radiator-off
           {% endif %}
-      # smart_heater_2_toggle:
-      #   value_template: '{{ states("input_boolean.smart_heater_2_state") }}'
-      #   friendly_name: "Govee Heater 2"
-      #   turn_on:
-      #     - service: input_boolean.turn_on
-      #       entity_id: input_boolean.smart_heater_2_state
-      #     - service: script.govee_heater_2_on
-      #   turn_off:
-      #     - service: input_boolean.turn_off
-      #       entity_id: input_boolean.smart_heater_2_state
-      #     - service: script.govee_heater_2_off
-      #   icon_template: >-
-      #     {% if is_state('input_boolean.smart_heater_2_state', 'on') %} mdi:radiator
-      #     {% else %} mdi:radiator-off
-      #     {% endif %}
+      govee_heater_2_toggle:
+        value_template: '{{ states("input_boolean.govee_heater_2_state") }}'
+        friendly_name: "Govee Heater 2"
+        turn_on:
+          - service: script.govee_heater_2_on
+        turn_off:
+          - service: script.govee_heater_2_off
+        icon_template: >-
+          {% if is_state('input_boolean.govee_heater_2_state', 'on') %} mdi:radiator
+          {% else %} mdi:radiator-off
+          {% endif %}
+
+sensor:
+  - platform: rest
+    name: "Govee Heater 1 API State"
+    method: POST
+    resource: https://openapi.api.govee.com/router/api/v1/device/state
+    headers:
+      Content-Type: application/json
+      Govee-API-Key: !secret govee_api_key
+    payload: >-
+      {
+        "requestId": "1_4",
+        "payload": {
+          "sku": "H7131",
+          "device": !secret govee_heater_1_device
+        }
+      }
+    value_template: >-
+      {% if value_json is defined and value_json.payload is defined and value_json.payload.capabilities is defined %}
+        {% set power = value_json.payload.capabilities | selectattr('instance', 'equalto', 'powerSwitch') | map(attribute='state') | map(attribute='value') | first | default(0) %}
+        {{ power }}
+      {% else %}
+        0
+      {% endif %}
+    scan_interval: 30
+    force_update: true
+    json_attributes_path: "$.payload.capabilities"
+    json_attributes:
+      - instance
+      - type
+      - state
+
+  - platform: rest
+    name: "Govee Heater 2 API State"
+    method: POST
+    resource: https://openapi.api.govee.com/router/api/v1/device/state
+    headers:
+      Content-Type: application/json
+      Govee-API-Key: !secret govee_api_key
+    payload: >-
+      {
+        "requestId": "2_4",
+        "payload": {
+          "sku": "H7131",
+          "device": !secret govee_heater_2_device
+        }
+      }
+    value_template: >-
+      {% if value_json is defined and value_json.payload is defined and value_json.payload.capabilities is defined %}
+        {% set power = value_json.payload.capabilities | selectattr('instance', 'equalto', 'powerSwitch') | map(attribute='state') | map(attribute='value') | first | default(0) %}
+        {{ power }}
+      {% else %}
+        0
+      {% endif %}
+    scan_interval: 30
+    force_update: true
+    json_attributes_path: "$.payload.capabilities"
+    json_attributes:
+      - instance
+      - type
+      - state
