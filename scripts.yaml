@@ -1,71 +1,111 @@
 govee_heater_lr_on:
-  alias: 'Govee Heater LR: On'
+  alias: 'Govee Heater Living Room: On'
   sequence:
   - service: rest_command.govee_appliance_request
     data:
-      requestId: "1"
+      requestId: "lr_on_1"
       sku: H7131
-      device: 90:46:60:74:F4:3B:C5:78
+      device: !secret govee_heater_lr_device
       capability_type: devices.capabilities.work_mode
       capability_instance: workMode
-      capability_value: {"workMode": 1, "modeValue": 2}
+      capability_value: '{"workMode": 1, "modeValue": 2}'
   - service: rest_command.govee_appliance_request
     data:
-      requestId: "2"
+      requestId: "lr_on_2"
       sku: H7131
-      device: 90:46:60:74:F4:3B:C5:78
+      device: !secret govee_heater_lr_device
       capability_type: devices.capabilities.on_off
       capability_instance: powerSwitch
       capability_value: 1
+  - service: input_boolean.turn_on
+    target:
+      entity_id: input_boolean.govee_heater_lr_state
+  - delay:
+      seconds: 3
+  - service: rest_command.govee_device_state
+    data:
+      requestId: "lr_on_3"
+      sku: H7131
+      device: !secret govee_heater_lr_device
   mode: single
   icon: mdi:radiator
 
 govee_heater_lr_off:
-  alias: 'Govee Heater LR: Off'
+  alias: 'Govee Heater Living Room: Off'
   sequence:
   - service: rest_command.govee_appliance_request
     data:
-      requestId: "3"
+      requestId: "lr_off_1"
       sku: H7131
-      device: 90:46:60:74:F4:3B:C5:78
+      device: !secret govee_heater_lr_device
       capability_type: devices.capabilities.on_off
       capability_instance: powerSwitch
       capability_value: 0
+  - service: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.govee_heater_lr_state
+  - delay:
+      seconds: 3
+  - service: rest_command.govee_device_state
+    data:
+      requestId: "lr_off_2"
+      sku: H7131
+      device: !secret govee_heater_lr_device
   mode: single
   icon: mdi:radiator-off
 
 govee_heater_gb_on:
-  alias: 'Govee Heater GB: On'
+  alias: 'Govee Heater Guest Bedroom: On'
   sequence:
   - service: rest_command.govee_appliance_request
     data:
-      requestId: "1"
+      requestId: "gb_on_1"
       sku: H7131
-      device: DB:33:D4:AD:FC:F2:3F:F8
+      device: !secret govee_heater_gb_device
       capability_type: devices.capabilities.work_mode
       capability_instance: workMode
-      capability_value: {"workMode": 1, "modeValue": 2}
+      capability_value: '{"workMode": 1, "modeValue": 2}'
   - service: rest_command.govee_appliance_request
     data:
-      requestId: "2"
+      requestId: "gb_on_2"
       sku: H7131
-      device: DB:33:D4:AD:FC:F2:3F:F8
+      device: !secret govee_heater_gb_device
       capability_type: devices.capabilities.on_off
       capability_instance: powerSwitch
       capability_value: 1
+  - service: input_boolean.turn_on
+    target:
+      entity_id: input_boolean.govee_heater_gb_state
+  - delay:
+      seconds: 3
+  - service: rest_command.govee_device_state
+    data:
+      requestId: "gb_on_3"
+      sku: H7131
+      device: !secret govee_heater_gb_device
   mode: single
   icon: mdi:radiator
 
 govee_heater_gb_off:
-  alias: 'Govee Heater GB: Off'
+  alias: 'Govee Heater Guest Bedroom: Off'
   sequence:
   - service: rest_command.govee_appliance_request
     data:
-      requestId: "3"
+      requestId: "gb_off_1"
       sku: H7131
-      device: DB:33:D4:AD:FC:F2:3F:F8
+      device: !secret govee_heater_gb_device
       capability_type: devices.capabilities.on_off
       capability_instance: powerSwitch
       capability_value: 0
+  - service: input_boolean.turn_off
+    target:
+      entity_id: input_boolean.govee_heater_gb_state
+  - delay:
+      seconds: 3
+  - service: rest_command.govee_device_state
+    data:
+      requestId: "gb_off_2"
+      sku: H7131
+      device: !secret govee_heater_gb_device
   mode: single
   icon: mdi:radiator-off

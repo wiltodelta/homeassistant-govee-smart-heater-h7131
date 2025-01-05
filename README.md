@@ -39,7 +39,7 @@ wget --no-check-certificate --quiet \
 
 ### 3. Configure Home Assistant
 
-Add lines from configuration.yaml, scripts.yaml and secrets.yaml to your configuration files. You should replace YOUR_GOVEE_API_KEY and YOUR_DEVICE_ID in these files beforehand.
+Add lines from configuration.yaml, scripts.yaml, automations.yaml and secrets.yaml to your configuration files. You should replace YOUR_GOVEE_API_KEY and YOUR_GOVEE_DEVICE_1_ID in these files beforehand. If you need to add a second device, uncomment the appropriate lines in scripts.yaml, configuration.yaml and automations.yaml.
 
 ### 4. Restart Home Assistant
 
