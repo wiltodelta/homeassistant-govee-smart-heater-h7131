@@ -2,24 +2,36 @@
   alias: "Sync Govee Heater States with API"
   description: "Synchronizes the state of Govee heaters with their API responses to ensure UI reflects actual device states"
   mode: single
-  trigger:
-    - platform: state
+  triggers:
+    - trigger: state
       entity_id: sensor.govee_heater_1_api_state
-    # - platform: state
+    # - trigger: state
     #   entity_id: sensor.govee_heater_2_api_state
-  action:
+  actions:
     - choose:
         - conditions:
             - condition: template
               value_template: "{{ trigger.entity_id == 'sensor.govee_heater_1_api_state' }}"
           sequence:
-            - service: input_boolean.turn_{{ 'on' if trigger.to_state.state == '1' else 'off' }}
-              target:
-                entity_id: input_boolean.govee_heater_1_state
+            - if: "{{ trigger.to_state.state == '1' }}"
+              then:
+                - type: turn_on
+                  target:
+                    entity_id: input_boolean.govee_heater_1_state
+              else:
+                - type: turn_off
+                  target:
+                    entity_id: input_boolean.govee_heater_1_state
         # - conditions:
         #     - condition: template
         #       value_template: "{{ trigger.entity_id == 'sensor.govee_heater_2_api_state' }}"
         #   sequence:
-        #     - service: input_boolean.turn_{{ 'on' if trigger.to_state.state == '1' else 'off' }}
-        #       target:
-        #         entity_id: input_boolean.govee_heater_2_state 
+        #     - if: "{{ trigger.to_state.state == '1' }}"
+        #       then:
+        #         - type: turn_on
+        #           target:
+        #             entity_id: input_boolean.govee_heater_2_state
+        #       else:
+        #         - type: turn_off
+        #           target:
+        #             entity_id: input_boolean.govee_heater_2_state 

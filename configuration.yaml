@@ -51,9 +51,13 @@ switch:
         value_template: '{{ states("input_boolean.govee_heater_1_state") }}'
         friendly_name: "Govee Heater 1"
         turn_on:
-          - service: script.govee_heater_1_on
+          - type: script
+            target:
+              entity_id: script.govee_heater_1_on
         turn_off:
-          - service: script.govee_heater_1_off
+          - type: script
+            target:
+              entity_id: script.govee_heater_1_off
         icon_template: >-
           {% if is_state('input_boolean.govee_heater_1_state', 'on') %} mdi:radiator
           {% else %} mdi:radiator-off
@@ -62,9 +66,13 @@ switch:
       #   value_template: '{{ states("input_boolean.govee_heater_2_state") }}'
       #   friendly_name: "Govee Heater 2"
       #   turn_on:
-      #     - service: script.govee_heater_2_on
+      #     - type: script
+      #       target:
+      #         entity_id: script.govee_heater_2_on
       #   turn_off:
-      #     - service: script.govee_heater_2_off
+      #     - type: script
+      #       target:
+      #         entity_id: script.govee_heater_2_off
       #   icon_template: >-
       #     {% if is_state('input_boolean.govee_heater_2_state', 'on') %} mdi:radiator
       #     {% else %} mdi:radiator-off
