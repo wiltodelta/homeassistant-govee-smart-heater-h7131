@@ -4,22 +4,22 @@
   mode: single
   trigger:
     - platform: state
-      entity_id: sensor.govee_heater_lr_api_state
-    - platform: state
-      entity_id: sensor.govee_heater_gb_api_state
+      entity_id: sensor.govee_heater_1_api_state
+    # - platform: state
+    #   entity_id: sensor.govee_heater_2_api_state
   action:
     - choose:
         - conditions:
             - condition: template
-              value_template: "{{ trigger.entity_id == 'sensor.govee_heater_lr_api_state' }}"
+              value_template: "{{ trigger.entity_id == 'sensor.govee_heater_1_api_state' }}"
           sequence:
             - service: input_boolean.turn_{{ 'on' if trigger.to_state.state == '1' else 'off' }}
               target:
-                entity_id: input_boolean.govee_heater_lr_state
-        - conditions:
-            - condition: template
-              value_template: "{{ trigger.entity_id == 'sensor.govee_heater_gb_api_state' }}"
-          sequence:
-            - service: input_boolean.turn_{{ 'on' if trigger.to_state.state == '1' else 'off' }}
-              target:
-                entity_id: input_boolean.govee_heater_gb_state 
+                entity_id: input_boolean.govee_heater_1_state
+        # - conditions:
+        #     - condition: template
+        #       value_template: "{{ trigger.entity_id == 'sensor.govee_heater_2_api_state' }}"
+        #   sequence:
+        #     - service: input_boolean.turn_{{ 'on' if trigger.to_state.state == '1' else 'off' }}
+        #       target:
+        #         entity_id: input_boolean.govee_heater_2_state 

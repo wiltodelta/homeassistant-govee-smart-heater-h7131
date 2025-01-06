@@ -4,6 +4,13 @@
 
 This guide provides step-by-step instructions for integrating the Govee Smart Heater H7131 into Home Assistant using the Govee Developer API.
 
+## Features
+
+- Turn heater on/off through Home Assistant
+- Monitor heater state
+- Automatic state updates every 30 seconds
+- Support for multiple heaters (optional)
+
 ## Prerequisites
 
 Before you begin, make sure you have the following:
@@ -48,5 +55,9 @@ Restart Home Assistant to apply the changes made to the configuration.
 ### 5. Add a button to the Home Assistant panel
 
 ![Screenshot](screenshot.png)
+
+## Contributing
+
+Feel free to submit issues and pull requests to improve this integration.
 
 Happy automating! 🏡✨
