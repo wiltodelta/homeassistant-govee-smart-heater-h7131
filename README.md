@@ -10,6 +10,7 @@ This guide provides step-by-step instructions for integrating the Govee Smart He
 - Monitor heater state
 - Automatic state updates every 30 seconds
 - Support for multiple heaters (optional)
+- Uses modern [template integration](https://www.home-assistant.io/integrations/template/) syntax
 
 ## Prerequisites
 

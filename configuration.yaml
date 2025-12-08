@@ -44,28 +44,27 @@ rest_command:
         }
       }
 
-switch:
-  - platform: template
-    switches:
-      govee_heater_1_toggle:
-        value_template: '{{ states("input_boolean.govee_heater_1_state") }}'
-        friendly_name: "Govee Heater 1"
+template:
+  - switch:
+      - name: "Govee Heater 1"
+        unique_id: govee_heater_1_toggle
+        state: '{{ states("input_boolean.govee_heater_1_state") }}'
         turn_on:
-          - service: script.govee_heater_1_on
+          - action: script.govee_heater_1_on
         turn_off:
-          - service: script.govee_heater_1_off
-        icon_template: >-
+          - action: script.govee_heater_1_off
+        icon: >-
           {% if is_state('input_boolean.govee_heater_1_state', 'on') %} mdi:radiator
           {% else %} mdi:radiator-off
           {% endif %}
-      # govee_heater_2_toggle:
-      #   value_template: '{{ states("input_boolean.govee_heater_2_state") }}'
-      #   friendly_name: "Govee Heater 2"
+      # - name: "Govee Heater 2"
+      #   unique_id: govee_heater_2_toggle
+      #   state: '{{ states("input_boolean.govee_heater_2_state") }}'
       #   turn_on:
-      #     - service: script.govee_heater_2_on
+      #     - action: script.govee_heater_2_on
       #   turn_off:
-      #     - service: script.govee_heater_2_off
-      #   icon_template: >-
+      #     - action: script.govee_heater_2_off
+      #   icon: >-
       #     {% if is_state('input_boolean.govee_heater_2_state', 'on') %} mdi:radiator
       #     {% else %} mdi:radiator-off
       #     {% endif %}
