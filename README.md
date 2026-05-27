@@ -57,6 +57,14 @@ Restart Home Assistant to apply the changes made to the configuration.
 
 ![Screenshot](screenshot.png)
 
+## Migrating from the legacy switch syntax
+
+If you set this integration up before December 2025, your `configuration.yaml` probably used the legacy `switch:` block with `platform: template`. Home Assistant deprecated that syntax and it stops working in version 2026.6, so you will see a "Legacy switch template deprecation" item under Settings > Repairs.
+
+To migrate, replace the old `switch: / platform: template / switches:` block with the modern `template: / - switch:` block from `configuration.yaml` in this repo. The key changes are `value_template` to `state`, `friendly_name` to `name`, `icon_template` to `icon`, and `service:` to `action:` inside `turn_on` and `turn_off`.
+
+The example here uses `unique_id`, which is right for a fresh setup. If you are migrating an existing setup and want to keep your current entity IDs (so dashboards and automations keep working), add `default_entity_id: switch.your_existing_id` to each switch instead, then restart Home Assistant to apply the changes.
+
 ## Contributing
 
 Feel free to submit issues and pull requests to improve this integration.
